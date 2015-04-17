@@ -1,0 +1,21 @@
+#!/bin/bash 
+#
+# General health checks for btrfs - intended to run every week.
+#
+
+#
+# Kick off scrubs
+#
+for i in `mount | grep btrfs | awk '{print $1}' | uniq ` ; do 
+	btrfs scrub start $i
+done
+
+#
+# Look at the status
+#
+for i in `mount | grep btrfs | awk '{print $1}' | uniq ` ; do 
+	echo "Status for $i"
+	btrfs scrub status $i
+	btrfs fi show $i 
+	echo
+done
